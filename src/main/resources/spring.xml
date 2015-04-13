@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--
+    Define JMS params for Apache Camel.
+    Underling JMS provider configured for IBM WebSphere MQ
+
+    This params used by MQEndpoint for connecting to queue manager and handle manager unavailability using exceptionListener
+    -->
+    <bean id="wmq" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="connectionFactory">
+            <bean class="com.ibm.mq.jms.MQConnectionFactory">
+                <property name="transportType" value="1"/>
+                <property name="hostName" value="localhost"/>
+                <property name="port" value="1416"/>
+                <property name="queueManager" value="TESTMQ"/>
+            </bean>
+        </property>
+        <property name="exceptionListener" ref="exceptionListener"/>
+    </bean>
+
+    <bean id="exceptionListener" class="ru.sbt.bm.exceptions.CustomJmsExceptionListener"/>
+
+</beans>
